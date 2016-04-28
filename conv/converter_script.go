@@ -66,8 +66,8 @@ func TE__converter_script(args ConverterParams) (string, error) {
 	/* func main() { */
 	result.WriteString(`func main() {
 `)
-	/* converter := jsonconv.NewEntityParser() */
-	result.WriteString(`	converter := jsonconv.NewEntityParser()
+	/* converter := jsonconv.New() */
+	result.WriteString(`	converter := jsonconv.New()
 `)
 	/* !for _, str := range args.Structs { */
 	for _, str := range args.Structs {

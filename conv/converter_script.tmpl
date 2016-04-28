@@ -14,7 +14,7 @@ func panicIfErr(err error) {
 }
 
 func main() {
-	converter := jsonconv.NewEntityParser()
+	converter := jsonconv.New()
 !for _, str := range args.Structs {
 	converter.Add({{=s str }}{})
 !}

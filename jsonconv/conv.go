@@ -6,6 +6,7 @@ import (
 	"os"
 	"reflect"
 	"strings"
+	"encoding/json"
 )
 
 type FieldType int
@@ -14,6 +15,7 @@ const (
 	FieldTypeArray FieldType = iota
 	FieldTypeObject
 
+	// TODO: Create two Number models for integers and decimals
 	FieldTypeNumber
 	FieldTypeString
 	FieldTypeBoolean
@@ -53,18 +55,22 @@ type TemplateArgs struct {
 }
 
 type JSONEntity struct {
-	Name   string
-	Fields []JSONField
+	Name   string      `json:"name"`
+	Fields []JSONField `json:"fields"`
 }
 
 type JSONField struct {
-	JsonName string
-	Type     FieldType
+	JsonName string    `json:"json_name"`
+	Type     FieldType `json:"type"`
 
 	// Used when Type is FieldTypeArray or FieldTypeObject:
-	ElementType FieldType
-	// Used with FieldTypeArray when the element type is FieldTypeObject
-	ElementTypeName string
+	ArrayElementType FieldType `json:"array_element_type"`
+
+	// Used with FieldTypeArray (if it is an array of objects) or FieldTypeObject
+	ElementTypeName string `json:"element_type_name"`
+
+	// TODO
+	Nullable bool `json:"nullable"`
 }
 
 type EntityParser struct {
@@ -73,7 +79,7 @@ type EntityParser struct {
 	alreadyConverted map[reflect.Type]bool
 }
 
-func NewEntityParser() *EntityParser {
+func New() *EntityParser {
 	return &EntityParser{
 		golangTypes:      []reflect.Type{},
 		jsonEntitites:    []JSONEntity{},
@@ -96,6 +102,16 @@ func (p *EntityParser) Parse() error {
 			return err
 		}
 		p.alreadyConverted[typeOf] = true
+	}
+	schemaFilename := "models_json_schema.json"
+	log.Println("Writing schema to " + schemaFilename)
+	f, err := os.Create(schemaFilename)
+	if err != nil {
+		fmt.Fprint(os.Stderr, "Cannot write schema json:", err.Error())
+	} else {
+		bytes, _ := json.MarshalIndent(p.jsonEntitites, "", "\t")
+		_, _ = f.Write(bytes)
+		f.Close()
 	}
 	return nil
 }
@@ -157,10 +173,10 @@ loop:
 				panic(fmt.Sprintf("Cannot find json element type for %s", fieldElemKind.String()))
 			}
 			res.Fields = append(res.Fields, JSONField{
-				JsonName:        jsonFieldName,
-				Type:            jsonType,
-				ElementType:     elementType,
-				ElementTypeName: field.Type.Elem().Name(),
+				JsonName:         jsonFieldName,
+				Type:             jsonType,
+				ArrayElementType: elementType,
+				ElementTypeName:  field.Type.Elem().Name(),
 			})
 			if elementType.IsComplex() {
 				p.ParseType(field.Type.Elem())
@@ -242,7 +258,7 @@ func TypescriptFieldTypeResolver(field JSONField) string {
 	}
 
 	if field.Type == FieldTypeArray {
-		if simple, found := simpleTypes[field.ElementType]; found {
+		if simple, found := simpleTypes[field.ArrayElementType]; found {
 			return fmt.Sprintf("%s[]", simple)
 		} else if len(field.ElementTypeName) > 0 {
 			return fmt.Sprintf("%s[]", field.ElementTypeName)
@@ -268,7 +284,7 @@ func JavaFieldTypeResolver(field JSONField) string {
 	}
 
 	if field.Type == FieldTypeArray {
-		if simple, found := simpleTypes[field.ElementType]; found {
+		if simple, found := simpleTypes[field.ArrayElementType]; found {
 			return fmt.Sprintf("ArrayList<%s>", simple)
 		} else if len(field.ElementTypeName) > 0 {
 			return fmt.Sprintf("ArrayList<%s>", field.ElementTypeName)

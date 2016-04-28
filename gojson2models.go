@@ -58,12 +58,12 @@ func main() {
 	pckg := packageParts[len(packageParts)-1]
 
 	filename, err := ioutil.TempDir(os.TempDir(), "")
-	handleErr(err)
+	panicIfErr(err)
 
 	filename = fmt.Sprintf("%s/gojson2models_%d.go", filename, time.Now().Nanosecond())
 
 	f, err := os.Create(filename)
-	handleErr(err)
+	panicIfErr(err)
 	defer f.Close()
 
 	structsArr := make([]string, 0)
@@ -88,7 +88,7 @@ func main() {
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		fmt.Println(string(output))
-		handleErr(err)
+		panicIfErr(err)
 	}
 	fmt.Println(string(output))
 }
@@ -101,18 +101,18 @@ func GetGolangFileStructs(filename string) ([]string, error) {
 		return nil, err
 	}
 
-	v := &AVisitor{}
+	v := &StructVisitor{}
 	ast.Walk(v, f)
 
 	return v.structs, nil
 }
 
-type AVisitor struct {
+type StructVisitor struct {
 	structNameCandidate string
 	structs             []string
 }
 
-func (v *AVisitor) Visit(node ast.Node) ast.Visitor {
+func (v *StructVisitor) Visit(node ast.Node) ast.Visitor {
 	if node != nil {
 		switch t := node.(type) {
 		case *ast.Ident:
@@ -129,7 +129,7 @@ func (v *AVisitor) Visit(node ast.Node) ast.Visitor {
 	return v
 }
 
-func handleErr(err error) {
+func panicIfErr(err error) {
 	if err != nil {
 		panic(err.Error())
 	}
