@@ -1,0 +1,23 @@
+!#arg args ConverterParams
+!#import "strings"
+package main
+
+import (
+    "{{=s args.ModelsPackage }}"
+	"github.com/tkrajina/typescriptify-golang-structs/jsonconv"
+)
+
+func panicIfErr(err error) {
+	if err != nil {
+		panic(err.Error())
+	}
+}
+
+func main() {
+	converter := jsonconv.NewEntityParser()
+!for _, str := range args.Structs {
+	converter.Add({{=s str }}{})
+!}
+	panicIfErr(converter.Parse())
+	panicIfErr(converter.ConvertTo{{=s strings.Title(args.TargetLanguage) }}("{{=s args.TargetFile }}"))
+}

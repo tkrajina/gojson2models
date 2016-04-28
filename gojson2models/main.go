@@ -3,48 +3,23 @@ package main
 import (
 	"flag"
 	"fmt"
+	"go/ast"
+	"go/parser"
+	"go/token"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
-	"text/template"
 	"time"
-	"go/ast"
-	"go/parser"
-	"go/token"
-)
 
-const TEMPLATE = `package main
-
-import (
-	"fmt"
-
-	"{{ .ModelsPackage }}"
-	"github.com/tkrajina/typescriptify-golang-structs/typescriptify"
+	"github.com/tkrajina/typescriptify-golang-structs/conv"
 )
 
 func main() {
-	t := typescriptify.New()
-{{ range .Structs }}	t.Add({{ . }}{})
-{{ end }}
-	err := t.ConvertToFile("{{ .TargetFile }}")
-	if err != nil {
-		panic(err.Error())
-	}
-	fmt.Println("OK")
-}`
-
-type Params struct {
-	ModelsPackage string
-	TargetFile    string
-	Structs       []string
-}
-
-func main() {
-	var packagePath, target, stringExtension string
+	var packagePath, language, target string
 	flag.StringVar(&packagePath, "package", "", "Path of the package with models")
-	flag.StringVar(&target, "target", "", "Target typescript file")
-	flag.StringVar(&stringExtension, "extension", "", "")
+	flag.StringVar(&language, "language", "", "Target language")
+	flag.StringVar(&target, "target", "", "Target models file")
 	flag.Parse()
 
 	structs := []string{}
@@ -71,11 +46,13 @@ func main() {
 		fmt.Fprintln(os.Stderr, "No target file")
 		os.Exit(1)
 	}
+	if len(language) == 0 {
+		fmt.Fprintln(os.Stderr, "No target language")
+		os.Exit(1)
+	}
 
 	packageParts := strings.Split(packagePath, string(os.PathSeparator))
 	pckg := packageParts[len(packageParts)-1]
-
-	t := template.Must(template.New("").Parse(TEMPLATE))
 
 	filename, err := ioutil.TempDir(os.TempDir(), "")
 	handleErr(err)
@@ -94,9 +71,14 @@ func main() {
 		}
 	}
 
-	params := Params{Structs: structsArr, ModelsPackage: packagePath, TargetFile: target}
-	err = t.Execute(f, params)
-	handleErr(err)
+	params := conv.ConverterParams{
+		Structs:        structsArr,
+		ModelsPackage:  packagePath,
+		TargetLanguage: language,
+		TargetFile:     target,
+	}
+	code := conv.T__converter_script(params)
+	f.Write([]byte(code))
 
 	cmd := exec.Command("go", "run", filename)
 	fmt.Println(strings.Join(cmd.Args, " "))
