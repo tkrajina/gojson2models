@@ -5,6 +5,7 @@ import (
 	"log"
 	"reflect"
 	"os"
+	"strings"
 )
 
 type FieldType int
@@ -138,9 +139,8 @@ func (p *EntityParser) ParseType(typeOf reflect.Type) error {
 	fields := deepFields(typeOf)
 loop:
 	for _, field := range fields {
-		jsonFieldName := field.Tag.Get("json")
-		if jsonFieldName == "-" {
-			log.Println("Ignored", field.Name)
+		jsonFieldName := getJsonFieldName(field)
+		if len(jsonFieldName) == 0 {
 			continue loop
 		}
 
@@ -188,6 +188,20 @@ loop:
 	p.alreadyConverted[typeOf] = true
 
 	return nil
+}
+
+func getJsonFieldName(field reflect.StructField) string {
+	jsonFieldName := field.Tag.Get("json")
+	if jsonFieldName == "-" || len(jsonFieldName) == 0 {
+		log.Println("Ignored", field.Name)
+		return ""
+	}
+
+	parts := strings.Split(jsonFieldName, ",")
+	if len(parts) > 0 {
+		jsonFieldName = parts[0]
+	}
+	return strings.TrimSpace(jsonFieldName)
 }
 
 func deepFields(typeOf reflect.Type) []reflect.StructField {

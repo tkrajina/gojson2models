@@ -12,7 +12,12 @@ func main() {
 	if err != nil {
 		panic(err.Error())
 	}
-	converter.ConvertToJava("test.java")
-	converter.ConvertToTypescript("test.ts")
+	err = converter.ConvertToJava("test.java")
+	if err != nil {
+		panic(err.Error())
+	}
+	err = converter.ConvertToTypescript("test.ts")
+	if err != nil {
+		panic(err.Error())
+	}
 }
-
