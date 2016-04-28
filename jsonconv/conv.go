@@ -3,8 +3,8 @@ package jsonconv
 import (
 	"fmt"
 	"log"
-	"reflect"
 	"os"
+	"reflect"
 	"strings"
 )
 
@@ -100,7 +100,7 @@ func (p *EntityParser) Parse() error {
 	return nil
 }
 
-func writeFile(filename string, bytes[] byte) error {
+func writeFile(filename string, bytes []byte) error {
 	f, err := os.Create(filename)
 	if err != nil {
 		panic(err.Error())
@@ -269,9 +269,9 @@ func JavaFieldTypeResolver(field JSONField) string {
 
 	if field.Type == FieldTypeArray {
 		if simple, found := simpleTypes[field.ElementType]; found {
-			return fmt.Sprintf("List<%s>", simple)
+			return fmt.Sprintf("ArrayList<%s>", simple)
 		} else if len(field.ElementTypeName) > 0 {
-			return fmt.Sprintf("List<%s>", field.ElementTypeName)
+			return fmt.Sprintf("ArrayList<%s>", field.ElementTypeName)
 		} else {
 			panic(fmt.Sprintf("No element type name for %v", field))
 		}
