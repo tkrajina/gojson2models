@@ -69,15 +69,13 @@ func TE__converter_script(args ConverterParams) (string, error) {
 	/* converter := jsonconv.New() */
 	result.WriteString(`	converter := jsonconv.New()
 `)
-	/* !for _, str := range args.Structs { */
+	/* !for _, str := range args.Structs */
 	for _, str := range args.Structs {
-
 		/* converter.Add({{=s str }}{}) */
 		result.WriteString(fmt.Sprintf(`	converter.Add(%s{})
 `, str))
-		/* !} */
+		/* !end */
 	}
-
 	/* panicIfErr(converter.Parse()) */
 	result.WriteString(`	panicIfErr(converter.Parse())
 `)

@@ -26,27 +26,23 @@ func TE__typescript(args TemplateArgs) (string, error) {
 	/*  */
 	result.WriteString(`
 `)
-	/* !for _, entity := range args.Entities { */
+	/* !for _, entity := range args.Entities */
 	for _, entity := range args.Entities {
-
 		/* class {{s entity.Name }} { */
 		result.WriteString(fmt.Sprintf(`class %s {
 `, __escape__(entity.Name)))
-		/* !		for _, field := range entity.Fields { */
+		/* !		for _, field := range entity.Fields */
 		for _, field := range entity.Fields {
-
 			/* {{=s field.JsonName }}: {{=s args.JSONFieldTypeString(field) }}; */
 			result.WriteString(fmt.Sprintf(`    %s: %s;
 `, field.JsonName, args.JSONFieldTypeString(field)))
-			/* !		} */
+			/* !		end */
 		}
-
 		/* } */
 		result.WriteString(`}
 `)
-		/* !} */
+		/* !end */
 	}
-
 	/*  */
 	result.WriteString(``)
 

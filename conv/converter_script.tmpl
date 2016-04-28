@@ -15,9 +15,9 @@ func panicIfErr(err error) {
 
 func main() {
 	converter := jsonconv.New()
-!for _, str := range args.Structs {
+!for _, str := range args.Structs
 	converter.Add({{=s str }}{})
-!}
+!end
 	panicIfErr(converter.Parse())
 	panicIfErr(converter.ConvertTo{{=s strings.Title(args.TargetLanguage) }}("{{=s args.TargetFile }}"))
 }

@@ -27,15 +27,13 @@ func TE__java(args TemplateArgs) (string, error) {
 	/*  */
 	result.WriteString(`
 `)
-	/* !for _, entity := range args.Entities { */
+	/* !for _, entity := range args.Entities */
 	for _, entity := range args.Entities {
-
 		/* public class {{s entity.Name }} { */
 		result.WriteString(fmt.Sprintf(`public class %s {
 `, __escape__(entity.Name)))
-		/* !		for _, field := range entity.Fields { */
+		/* !		for _, field := range entity.Fields */
 		for _, field := range entity.Fields {
-
 			/* @JsonProperty("{{=s field.JsonName }}") */
 			result.WriteString(fmt.Sprintf(`    @JsonProperty("%s")
 `, field.JsonName))
@@ -45,15 +43,13 @@ func TE__java(args TemplateArgs) (string, error) {
 			/*  */
 			result.WriteString(`
 `)
-			/* !		} */
+			/* !		end */
 		}
-
 		/*  */
 		result.WriteString(`
 `)
-		/* !		for _, field := range entity.Fields { */
+		/* !		for _, field := range entity.Fields */
 		for _, field := range entity.Fields {
-
 			/* public void set{{=s strings.Title(field.JsonName) }}({{=s args.JSONFieldTypeString(field) }} value) { */
 			result.WriteString(fmt.Sprintf(`    public void set%s(%s value) {
 `, strings.Title(field.JsonName), args.JSONFieldTypeString(field)))
@@ -75,15 +71,13 @@ func TE__java(args TemplateArgs) (string, error) {
 			/*  */
 			result.WriteString(`
 `)
-			/* !		} */
+			/* !		end */
 		}
-
 		/* } */
 		result.WriteString(`}
 `)
-		/* !} */
+		/* !end */
 	}
-
 	/*  */
 	result.WriteString(``)
 
