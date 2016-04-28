@@ -54,8 +54,8 @@ func TE__java(args TemplateArgs) (string, error) {
 		/* !		for _, field := range entity.Fields { */
 		for _, field := range entity.Fields {
 
-			/* public set{{=s strings.Title(field.JsonName) }}(value {{=s args.JSONFieldTypeString(field) }}) { */
-			result.WriteString(fmt.Sprintf(`    public set%s(value %s) {
+			/* public void set{{=s strings.Title(field.JsonName) }}({{=s args.JSONFieldTypeString(field) }} value) { */
+			result.WriteString(fmt.Sprintf(`    public void set%s(%s value) {
 `, strings.Title(field.JsonName), args.JSONFieldTypeString(field)))
 			/* this.{{=s field.JsonName }} = value; */
 			result.WriteString(fmt.Sprintf(`            this.%s = value;
@@ -63,9 +63,9 @@ func TE__java(args TemplateArgs) (string, error) {
 			/* } */
 			result.WriteString(`    }
 `)
-			/* public get{{=s strings.Title(field.JsonName) }}() { */
-			result.WriteString(fmt.Sprintf(`    public get%s() {
-`, strings.Title(field.JsonName)))
+			/* public {{=s args.JSONFieldTypeString(field) }} get{{=s strings.Title(field.JsonName) }}() { */
+			result.WriteString(fmt.Sprintf(`    public %s get%s() {
+`, args.JSONFieldTypeString(field), strings.Title(field.JsonName)))
 			/* return this.{{=s field.JsonName }}; */
 			result.WriteString(fmt.Sprintf(`            return this.%s;
 `, field.JsonName))

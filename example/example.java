@@ -10,47 +10,47 @@ public class Address {
     private String country;
 
 
-    public setCity(value String) {
+    public void setCity(String value) {
             this.city = value;
     }
-    public getCity() {
+    public String getCity() {
             return this.city;
     }
 
-    public setNumber(value Double) {
+    public void setNumber(Double value) {
             this.number = value;
     }
-    public getNumber() {
+    public Double getNumber() {
             return this.number;
     }
 
-    public setCountry(value String) {
+    public void setCountry(String value) {
             this.country = value;
     }
-    public getCountry() {
+    public String getCountry() {
             return this.country;
     }
 
 }
 public class PersonalInfo {
     @JsonProperty("hobby")
-    private List<String> hobby;
+    private ArrayList<String> hobby;
 
     @JsonProperty("pet_name")
     private String pet_name;
 
 
-    public setHobby(value List<String>) {
+    public void setHobby(ArrayList<String> value) {
             this.hobby = value;
     }
-    public getHobby() {
+    public ArrayList<String> getHobby() {
             return this.hobby;
     }
 
-    public setPet_name(value String) {
+    public void setPet_name(String value) {
             this.pet_name = value;
     }
-    public getPet_name() {
+    public String getPet_name() {
             return this.pet_name;
     }
 
@@ -63,37 +63,37 @@ public class Person {
     private PersonalInfo personal_info;
 
     @JsonProperty("nicknames")
-    private List<String> nicknames;
+    private ArrayList<String> nicknames;
 
     @JsonProperty("addresses")
-    private List<Address> addresses;
+    private ArrayList<Address> addresses;
 
 
-    public setName(value String) {
+    public void setName(String value) {
             this.name = value;
     }
-    public getName() {
+    public String getName() {
             return this.name;
     }
 
-    public setPersonal_info(value PersonalInfo) {
+    public void setPersonal_info(PersonalInfo value) {
             this.personal_info = value;
     }
-    public getPersonal_info() {
+    public PersonalInfo getPersonal_info() {
             return this.personal_info;
     }
 
-    public setNicknames(value List<String>) {
+    public void setNicknames(ArrayList<String> value) {
             this.nicknames = value;
     }
-    public getNicknames() {
+    public ArrayList<String> getNicknames() {
             return this.nicknames;
     }
 
-    public setAddresses(value List<Address>) {
+    public void setAddresses(ArrayList<Address> value) {
             this.addresses = value;
     }
-    public getAddresses() {
+    public ArrayList<Address> getAddresses() {
             return this.addresses;
     }
 

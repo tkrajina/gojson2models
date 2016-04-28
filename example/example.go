@@ -18,4 +18,3 @@ type Person struct {
 	Nicknames    []string     `json:"nicknames"`
 	Addresses    []Address    `json:"addresses"`
 }
-
