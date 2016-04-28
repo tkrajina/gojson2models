@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tkrajina/typescriptify-golang-structs/conv"
+	"github.com/tkrajina/gojson2models/conv"
 )
 
 func main() {
@@ -57,7 +57,7 @@ func main() {
 	filename, err := ioutil.TempDir(os.TempDir(), "")
 	handleErr(err)
 
-	filename = fmt.Sprintf("%s/typescriptify_%d.go", filename, time.Now().Nanosecond())
+	filename = fmt.Sprintf("%s/gojson2models_%d.go", filename, time.Now().Nanosecond())
 
 	f, err := os.Create(filename)
 	handleErr(err)

@@ -36,8 +36,8 @@ func TE__converter_script(args ConverterParams) (string, error) {
 	/* "{{=s args.ModelsPackage }}" */
 	result.WriteString(fmt.Sprintf(`    "%s"
 `, args.ModelsPackage))
-	/* "github.com/tkrajina/typescriptify-golang-structs/jsonconv" */
-	result.WriteString(`	"github.com/tkrajina/typescriptify-golang-structs/jsonconv"
+	/* "github.com/tkrajina/gojson2models/jsonconv" */
+	result.WriteString(`	"github.com/tkrajina/gojson2models/jsonconv"
 `)
 	/* ) */
 	result.WriteString(`)
