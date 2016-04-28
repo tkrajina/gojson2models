@@ -40,14 +40,17 @@ func main() {
 
 	if len(packagePath) == 0 {
 		fmt.Fprintln(os.Stderr, "No package given")
+		flag.Usage()
 		os.Exit(1)
 	}
 	if len(target) == 0 {
 		fmt.Fprintln(os.Stderr, "No target file")
+		flag.Usage()
 		os.Exit(1)
 	}
 	if len(language) == 0 {
 		fmt.Fprintln(os.Stderr, "No target language")
+		flag.Usage()
 		os.Exit(1)
 	}
 
