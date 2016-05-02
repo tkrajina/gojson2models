@@ -27,19 +27,25 @@ func TE__java(args TemplateArgs) (string, error) {
 	/*  */
 	result.WriteString(`
 `)
+	/* public class {{s args.Namespace }} { */
+	result.WriteString(fmt.Sprintf(`public class %s {
+`, __escape__(args.Namespace)))
+	/*  */
+	result.WriteString(`
+`)
 	/* !for _, entity := range args.Entities */
 	for _, entity := range args.Entities {
-		/* public class {{s entity.Name }} { */
-		result.WriteString(fmt.Sprintf(`public class %s {
+		/* public static final class {{s entity.Name }} { */
+		result.WriteString(fmt.Sprintf(`    public static final class %s {
 `, __escape__(entity.Name)))
 		/* !		for _, field := range entity.Fields */
 		for _, field := range entity.Fields {
 			/* @JsonProperty("{{=s field.JsonName }}") */
-			result.WriteString(fmt.Sprintf(`    @JsonProperty("%s")
+			result.WriteString(fmt.Sprintf(`        @JsonProperty("%s")
 `, field.JsonName))
-			/* private {{=s args.JSONFieldTypeString(field) }} {{=s field.JsonName }}; */
-			result.WriteString(fmt.Sprintf(`    private %s %s;
-`, args.JSONFieldTypeString(field), field.JsonName))
+			/* private {{=s args.JSONFieldTypeString(field) }} {{=s firstLetterLowercase(field.JsonName) }}; */
+			result.WriteString(fmt.Sprintf(`        private %s %s;
+`, args.JSONFieldTypeString(field), firstLetterLowercase(field.JsonName)))
 			/*  */
 			result.WriteString(`
 `)
@@ -51,22 +57,22 @@ func TE__java(args TemplateArgs) (string, error) {
 		/* !		for _, field := range entity.Fields */
 		for _, field := range entity.Fields {
 			/* public void set{{=s strings.Title(field.JsonName) }}({{=s args.JSONFieldTypeString(field) }} value) { */
-			result.WriteString(fmt.Sprintf(`    public void set%s(%s value) {
+			result.WriteString(fmt.Sprintf(`        public void set%s(%s value) {
 `, strings.Title(field.JsonName), args.JSONFieldTypeString(field)))
-			/* this.{{=s field.JsonName }} = value; */
-			result.WriteString(fmt.Sprintf(`            this.%s = value;
-`, field.JsonName))
+			/* this.{{=s firstLetterLowercase(field.JsonName) }} = value; */
+			result.WriteString(fmt.Sprintf(`                this.%s = value;
+`, firstLetterLowercase(field.JsonName)))
 			/* } */
-			result.WriteString(`    }
+			result.WriteString(`        }
 `)
 			/* public {{=s args.JSONFieldTypeString(field) }} get{{=s strings.Title(field.JsonName) }}() { */
-			result.WriteString(fmt.Sprintf(`    public %s get%s() {
+			result.WriteString(fmt.Sprintf(`        public %s get%s() {
 `, args.JSONFieldTypeString(field), strings.Title(field.JsonName)))
-			/* return this.{{=s field.JsonName }}; */
-			result.WriteString(fmt.Sprintf(`            return this.%s;
-`, field.JsonName))
+			/* return this.{{=s firstLetterLowercase(field.JsonName) }}; */
+			result.WriteString(fmt.Sprintf(`                return this.%s;
+`, firstLetterLowercase(field.JsonName)))
 			/* } */
-			result.WriteString(`    }
+			result.WriteString(`        }
 `)
 			/*  */
 			result.WriteString(`
@@ -74,10 +80,13 @@ func TE__java(args TemplateArgs) (string, error) {
 			/* !		end */
 		}
 		/* } */
-		result.WriteString(`}
+		result.WriteString(`    }
 `)
 		/* !end */
 	}
+	/* } */
+	result.WriteString(`}
+`)
 	/*  */
 	result.WriteString(``)
 

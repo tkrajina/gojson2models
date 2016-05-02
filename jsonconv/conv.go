@@ -1,12 +1,12 @@
 package jsonconv
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
 	"reflect"
 	"strings"
-	"encoding/json"
 )
 
 type FieldType int
@@ -51,6 +51,7 @@ func init() {
 
 type TemplateArgs struct {
 	Entities            []JSONEntity
+	Namespace           string
 	JSONFieldTypeString func(JSONField) string
 }
 
@@ -129,6 +130,7 @@ func writeFile(filename string, bytes []byte) error {
 func (p *EntityParser) ConvertToJava(filename string) error {
 	result := T__java(TemplateArgs{
 		Entities:            p.jsonEntitites,
+		Namespace: "Models",
 		JSONFieldTypeString: JavaFieldTypeResolver,
 	})
 	return writeFile(filename, []byte(result))
