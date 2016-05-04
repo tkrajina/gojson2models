@@ -35,6 +35,9 @@ func TE__java(args TemplateArgs) (string, error) {
 `)
 	/* !for _, entity := range args.Entities */
 	for _, entity := range args.Entities {
+		/* @JsonIgnoreProperties(ignoreUnknown = true) */
+		result.WriteString(`    @JsonIgnoreProperties(ignoreUnknown = true)
+`)
 		/* public static final class {{s entity.Name }} { */
 		result.WriteString(fmt.Sprintf(`    public static final class %s {
 `, __escape__(entity.Name)))

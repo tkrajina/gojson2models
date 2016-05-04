@@ -1,6 +1,7 @@
 
 public class Models {
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Address {
         @JsonProperty("city")
         private String city;
@@ -34,6 +35,7 @@ public class Models {
         }
 
     }
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class PersonalInfo {
         @JsonProperty("hobby")
         private ArrayList<String> hobby;
@@ -57,6 +59,7 @@ public class Models {
         }
 
     }
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Person {
         @JsonProperty("name")
         private String name;

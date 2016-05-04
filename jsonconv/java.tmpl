@@ -4,6 +4,7 @@
 public class {{s args.Namespace }} {
 
 !for _, entity := range args.Entities
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class {{s entity.Name }} {
 !		for _, field := range entity.Fields
         @JsonProperty("{{=s field.JsonName }}")
