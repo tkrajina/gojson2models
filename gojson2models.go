@@ -123,6 +123,7 @@ func (v *StructVisitor) Visit(node ast.Node) ast.Visitor {
 				v.structNameCandidate = ""
 			}
 		default:
+			fmt.Println("t=", t)
 			v.structNameCandidate = ""
 		}
 	}

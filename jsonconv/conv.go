@@ -130,7 +130,7 @@ func writeFile(filename string, bytes []byte) error {
 func (p *EntityParser) ConvertToJava(filename string) error {
 	result := T__java(TemplateArgs{
 		Entities:            p.jsonEntitites,
-		Namespace: "Models",
+		Namespace:           "Models",
 		JSONFieldTypeString: JavaFieldTypeResolver,
 	})
 	return writeFile(filename, []byte(result))
@@ -184,11 +184,16 @@ loop:
 				p.ParseType(field.Type.Elem())
 			}
 		} else if jsonType == FieldTypeObject {
+			name := field.Type.Name()
+			if len(name) == 0 {
+				// This is for anonymous structs, create a custom name:
+				name = "XXX"
+			}
 			// Object/struct
 			res.Fields = append(res.Fields, JSONField{
 				JsonName:        jsonFieldName,
 				Type:            jsonType,
-				ElementTypeName: field.Type.Name(),
+				ElementTypeName: name,
 			})
 			if jsonType.IsComplex() {
 				p.ParseType(field.Type)

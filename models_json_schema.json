@@ -1,0 +1,26 @@
+[
+	{
+		"name": "",
+		"fields": [
+			{
+				"json_name": "aaa",
+				"type": 3,
+				"array_element_type": 0,
+				"element_type_name": "",
+				"nullable": false
+			}
+		]
+	},
+	{
+		"name": "Person",
+		"fields": [
+			{
+				"json_name": "bu",
+				"type": 1,
+				"array_element_type": 0,
+				"element_type_name": "XXX",
+				"nullable": false
+			}
+		]
+	}
+]
